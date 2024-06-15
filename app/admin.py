@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Product, Image,ProductAttribute, Attributes, AttiributeValue
+from app.models import Product, Image, ProductAttribute, Attributes, AttiributeValue, Customer
 # Register your models here.
 
 
@@ -8,3 +8,6 @@ admin.site.register(Image)
 admin.site.register(ProductAttribute)
 admin.site.register(Attributes)
 admin.site.register(AttiributeValue)
+
+
+admin.site.register(Customer)

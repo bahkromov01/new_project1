@@ -1,7 +1,10 @@
-from django.shortcuts import render, redirect
-
 from app.forms import ProductForm
 from app.models import Product
+from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
+from app.models import Customer
+from app.forms import CustomerForm
+
 # Create your views here.
 
 
@@ -45,3 +48,16 @@ def add_product(request):
         'form': form
     }
     return render(request, 'app/add_product.html', context)
+
+
+def add_customer(request):
+    if request.method == "POST":
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('customer_list')
+    else:
+        form = CustomerForm()
+    return render(request, 'app/add_customer.html', {'form': form})
+
+

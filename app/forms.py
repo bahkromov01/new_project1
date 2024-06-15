@@ -1,4 +1,6 @@
 from django import forms
+from app.models import Customer
+from .models import Customer
 
 
 class ProductForm(forms.Form):
@@ -10,3 +12,7 @@ class ProductForm(forms.Form):
     quantity = forms.IntegerField()
 
 
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ['full_name', 'email', 'phone', 'address', 'join_date']
