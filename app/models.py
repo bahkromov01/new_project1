@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 # Create your models here.
@@ -61,12 +63,7 @@ class ProductAttribute(models.Model):
     attiribute_value = models.ForeignKey('app.AttiributeValue', on_delete=models.CASCADE)
 
 
-class Customer(models.Model):
-    full_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15)
-    join_date = models.DateTimeField(auto_now_add=True)
-    address = models.TextField()
 
-    def __str__(self):
-        return f"{self.full_name}"
+
+
+
