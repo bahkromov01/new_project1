@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
-
+from django.db.models import Q
 from customer.models import Customer
 from customer.forms import CustomerModelForm
 
@@ -8,7 +8,11 @@ from customer.forms import CustomerModelForm
 
 
 def customers(request):
-    customer_list = Customer.objects.all()
+    search_query = request.GET.get('search', 'Not Found')
+    if search_query:
+        customer_list = Customer.objects.filter(Q(full_name__icontains=search_query)| Q(email__icontains=search_query))
+    else:
+        customer_list = Customer.objects.all()
     context = {
         'customer_list': customer_list,
     }
