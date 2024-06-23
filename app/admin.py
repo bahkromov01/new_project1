@@ -9,5 +9,3 @@ admin.site.register(ProductAttribute)
 admin.site.register(Attributes)
 admin.site.register(AttiributeValue)
 
-
-

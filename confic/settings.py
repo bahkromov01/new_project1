@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'customer.apps.CustomerConfig',
-    'account.apps.AccountConfig',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +115,7 @@ USE_I18N = True
 USE_TZ = True
 
 import os
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -130,4 +130,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'customer.CustomerUser'
+AUTH_USER_MODEL = 'customer.User'

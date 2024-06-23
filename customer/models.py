@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 
+# from customer.managers import CustomerUserManagers
 from customer.managers import CustomerUserManagers
 
 
@@ -21,18 +22,18 @@ class Customer(models.Model):
         return self.email
 
 
-class CustomerUser(AbstractUser, PermissionsMixin):
+class User(AbstractUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length=255, blank=True, null=True)
+    username = models.CharField(max_length=255, null=True)
+    phone_number = models.CharField(max_length=13, blank=True, null=True)
     birth_date = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     objects = CustomerUserManagers()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    def str(self):
+    def __str__(self):
         return self.email
-
