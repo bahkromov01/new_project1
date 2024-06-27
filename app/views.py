@@ -2,6 +2,9 @@ from app.forms import ProductForm
 from app.models import Product
 from django.shortcuts import render, redirect
 from django.shortcuts import render, get_object_or_404, redirect
+from customer.forms import CustomerModelForm
+from customer.models import Customer
+
 
 # Create your views here.
 
@@ -48,39 +51,39 @@ def add_product(request):
     return render(request, 'app/add_product.html', context)
 
 
-# def customer_list(request):
-#     users = Customer.objects.all()
-#     return render(request, 'app/customer_list.html', {'users': users})
-#
-#
-# def customer_detail(request, customer_id):
-#     users = Product.objects.get(id=customer_id)
-#     attributes =users.get_attributes()
-#     context = {
-#         'users': users,
-#         'attributes': attributes
-#     }
-#     return render(request, 'app/customer_detail.html', context)
-#
-#
-# def add_customer(request):
-#     if request.method == 'POST':
-#         form = CustomerForm(request.POST)
-#         full_name = request.POST['full_name']
-#         phone = request.POST['phone']
-#         email = request.POST['email']
-#         address = request.POST['address']
-#         joined = request.POST['joined']
-#         users = Customer(full_name=full_name, phone=phone, email=email, address=address, joined=joined)
-#
-#         if form.is_valid():
-#             users.save()
-#             return redirect('customer_list')
-#         else:
-#             print(form.errors)
-#     else:
-#         form = CustomerForm()
-#     return render(request, 'app/add_customer.html', {'form': form})
+def customer_list(request):
+    users = Customer.objects.all()
+    return render(request, 'customer/customer_list.html', {'users': users})
+
+
+def customer_detail(request, customer_id):
+    users = Product.objects.get(id=customer_id)
+    attributes =users.get_attributes()
+    context = {
+        'users': users,
+        'attributes': attributes
+    }
+    return render(request, 'customer/customer_detail.html', context)
+
+
+def add_customer(request):
+    if request.method == 'POST':
+        form = CustomerModelForm()
+        full_name = request.POST['full_name']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        address = request.POST['address']
+        joined = request.POST['joined']
+        users = Customer(full_name=full_name, phone=phone, email=email, address=address, joined=joined)
+
+        if form.is_valid():
+            users.save()
+            return redirect('customer_list')
+        else:
+            print(form.errors)
+    else:
+        form = CustomerModelForm()
+    return render(request, 'customer/add_customer.html', {'form': form})
 
 
 

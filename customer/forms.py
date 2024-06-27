@@ -61,3 +61,20 @@ class LoginForm(forms.Form):
 #         return password1
 
 
+class RegisterModelForm(forms.ModelForm):
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password', 'confirm_password')
+
+    def clean_email(self):
+        email = self.data.get('email').lower()
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError(f'The {email} is already registered')
+        return email
+
+    def clean_confic_password(self):
+        password = self.data.get('password')
+        confic_password = self.data.get('confic_password')
+        if password != confic_password:
+            raise forms.ValidationError('Password error')

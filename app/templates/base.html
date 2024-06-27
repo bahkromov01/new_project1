@@ -11,7 +11,7 @@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>Falcon | Dashboard &amp; Web App Template</title>
+    <title>{% block title %}{% endblock %}</title>
 
 
     <!-- ===============================================-->
@@ -31,6 +31,7 @@
     <!-- ===============================================-->
     <!--    Stylesheets-->
     <!-- ===============================================-->
+    <link href="{% static 'vendors/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
     <link href="{% static 'vendors/overlayscrollbars/OverlayScrollbars.min.css' %}" rel="stylesheet">
@@ -62,35 +63,71 @@
     <!--    Main Content-->
     <!-- ===============================================-->
     <main class="main" id="top">
-      <div class="container-fluid">
-        <div class="row min-vh-100 flex-center g-0">
-          <div class="col-lg-8 col-xxl-5 py-3 position-relative"><img class="bg-auth-circle-shape" src="{% static 'assets/img/icons/spot-illustrations/bg-shape.png' %}" alt="" width="250"><img class="bg-auth-circle-shape-2" src="{% static 'assets/img/icons/spot-illustrations/shape-1.png' %}" alt="" width="150">
-            <div class="card overflow-hidden z-index-1">
-              <div class="card-body p-0">
-                <div class="row g-0 h-100">
-                  <div class="col-md-5 text-center bg-card-gradient">
-                    <div class="position-relative p-4 pt-md-5 pb-md-7 light">
-                      <div class="bg-holder bg-auth-card-shape" style="background-image:url({% static 'assets/img/icons/spot-illustrations/half-circle.png' %});">
-                      </div>
-                      <!--/.bg-holder-->
+      <div class="container" data-layout="container">
+        <script>
+          var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+          if (isFluid) {
+            var container = document.querySelector('[data-layout]');
+            container.classList.remove('container');
+            container.classList.add('container-fluid');
+          }
+        </script>
+      {% include '_navbar.html' %}
 
-                      <div class="z-index-1 position-relative"><a class="link-light mb-4 font-sans-serif fs-4 d-inline-block fw-bolder" href="../../../index.html">falcon</a>
-                        <p class="opacity-75 text-white">With the power of Falcon, you can now focus only on functionaries for your digital products, while leaving the UI design on us!</p>
-                      </div>
+        {% block main_content %}
+        {% endblock %}
+
+        {% block customer_content %}
+        {% endblock %}
+
+        {% block product_detail_content %}
+        {% endblock %}
+
+        <div class="modal fade" id="authentication-modal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+          <div class="modal-dialog mt-6" role="document">
+            <div class="modal-content border-0">
+              <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                <div class="position-relative z-index-1 light">
+                  <h4 class="mb-0 text-white" id="authentication-modal-label">Register</h4>
+                  <p class="fs--1 mb-0 text-white">Please create your free Falcon account</p>
+                </div>
+                <button class="btn-close btn-close-white position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body py-4 px-5">
+                <form>
+                  <div class="mb-3">
+                    <label class="form-label" for="modal-auth-name">Name</label>
+                    <input class="form-control" type="text" autocomplete="on" id="modal-auth-name" />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="modal-auth-email">Email address</label>
+                    <input class="form-control" type="email" autocomplete="on" id="modal-auth-email" />
+                  </div>
+                  <div class="row gx-2">
+                    <div class="mb-3 col-sm-6">
+                      <label class="form-label" for="modal-auth-password">Password</label>
+                      <input class="form-control" type="password" autocomplete="on" id="modal-auth-password" />
                     </div>
-                    <div class="mt-3 mb-4 mt-md-4 mb-md-5 light">
-                      <p class="mb-0 mt-4 mt-md-5 fs--1 fw-semi-bold text-white opacity-75">Read our <a class="text-decoration-underline text-white" href="#!">terms</a> and <a class="text-decoration-underline text-white" href="#!">conditions </a></p>
+                    <div class="mb-3 col-sm-6">
+                      <label class="form-label" for="modal-auth-confirm-password">Confirm Password</label>
+                      <input class="form-control" type="password" autocomplete="on" id="modal-auth-confirm-password" />
                     </div>
                   </div>
-                  <div class="col-md-7 d-flex flex-center">
-                    <div class="p-4 p-md-5 flex-grow-1">
-                      <div class="text-center"><img class="d-block mx-auto mb-4" src="{% static 'assets/img/icons/spot-illustrations/45.png' %}" alt="shield" width="100" />
-                        <h3>See you again!</h3>
-                        <p>Thanks for using Falcon. You are <br />now successfully signed out.</p><a class="btn btn-primary btn-sm mt-3" href="{% url 'login' %}"><span class="fas fa-chevron-left me-1"
-                                                                                                                                                                                                    data-fa-transform="shrink-4 down-1"></span>Return to Login</a>
-                      </div>
-                    </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="modal-auth-register-checkbox" />
+                    <label class="form-label" for="modal-auth-register-checkbox">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
                   </div>
+                  <div class="mb-3">
+                    <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">Register</button>
+                  </div>
+                </form>
+                <div class="position-relative mt-5">
+                  <hr class="bg-300" />
+                  <div class="divider-content-center">or register with</div>
+                </div>
+                <div class="row g-2 mt-2">
+                  <div class="col-sm-6"><a class="btn btn-outline-google-plus btn-sm d-block w-100" href="#"><span class="fab fa-google-plus-g me-2" data-fa-transform="grow-8"></span> google</a></div>
+                  <div class="col-sm-6"><a class="btn btn-outline-facebook btn-sm d-block w-100" href="#"><span class="fab fa-facebook-square me-2" data-fa-transform="grow-8"></span> facebook</a></div>
                 </div>
               </div>
             </div>
@@ -219,6 +256,7 @@
     <script src="{% static 'vendors/bootstrap/bootstrap.min.js' %}"></script>
     <script src="{% static 'vendors/anchorjs/anchor.min.js' %}"></script>
     <script src="{% static 'vendors/is/is.min.js' %}"></script>
+    <script src="{% static 'vendors/swiper/swiper-bundle.min.js' %}"></script>
     <script src="{% static 'vendors/fontawesome/all.min.js' %}"></script>
     <script src="{% static 'vendors/lodash/lodash.min.js' %}"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>

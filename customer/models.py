@@ -17,6 +17,7 @@ class Customer(models.Model):
     address = models.TextField(blank=True, null=True)
     joined = models.DateTimeField(default=datetime.now())
     image = models.ImageField(upload_to='customers/customer_images', blank=True, null=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.email
