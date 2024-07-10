@@ -78,3 +78,4 @@ class RegisterModelForm(forms.ModelForm):
         confic_password = self.data.get('confic_password')
         if password != confic_password:
             raise forms.ValidationError('Password error')
+
