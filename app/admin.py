@@ -16,7 +16,6 @@ class ProductModelAdmin(admin.ModelAdmin):
     list_per_page = 2
 
 
-
 admin.site.register(Product, ProductModelAdmin)
 
 

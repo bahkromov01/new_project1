@@ -1,7 +1,7 @@
 from django.urls import path
 
 from customer.views.auth import login_page, logout_user, register
-from customer.views.views import customers, add_customer, delete_customer, edit_customer
+from customer.views.views import customers, add_customer, delete_customer, edit_customer,export_data
 
 urlpatterns = [
     path('customer_list/', customers, name='customers'),
@@ -11,5 +11,7 @@ urlpatterns = [
     path('login_page/', login_page, name='login'),
     # path('login_phone/', login_phone, name='login_phone'),
     path('logout_user/', logout_user, name='logout'),
-    path('register/', register, name='register')
+    path('register/', register, name='register'),
+    path('export_data/', export_data, name='export_data')
+
 ]

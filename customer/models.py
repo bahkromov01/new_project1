@@ -23,7 +23,7 @@ class Customer(models.Model):
         return self.email
 
 
-class User(AbstractUser, PermissionsMixin):
+class User(AbstractUser, PermissionsMixin,):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=255, null=True)
     phone_number = models.CharField(max_length=13, blank=True, null=True)
@@ -38,3 +38,19 @@ class User(AbstractUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class SortableBook(models.Model):
+    title = models.CharField(
+        "Title",
+        max_length=255,
+    )
+
+    my_order = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+    )
+
+    class Meta:
+        ordering = ['my_order']
