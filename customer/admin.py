@@ -10,7 +10,7 @@ from customer.models import Customer, User, SortableBook
 
 # admin.site.register(Customer)
 
-
+@admin.register(Customer)
 class CustomerModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'full_name', 'email']
     search_fields = ['email', 'id']
@@ -25,6 +25,7 @@ class CustomerModelAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
 
 @admin.register(SortableBook)
 class SortableBookAdmin(SortableAdminMixin, admin.ModelAdmin):
