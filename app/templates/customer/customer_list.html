@@ -5,7 +5,7 @@
           <nav class="navbar navbar-light navbar-glass navbar-top navbar-expand">
 
             <button class="btn navbar-toggler-humburger-icon navbar-toggler me-1 me-sm-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
-            <a class="navbar-brand me-1 me-sm-3" href="../../index.html">
+            <a class="navbar-brand me-1 me-sm-3" href="{% url 'index' %}">
               <div class="d-flex align-items-center"><img class="me-2" src="{% static 'assets/img/icons/spot-illustrations/falcon.png' %}" alt="" width="40" /><span class="font-sans-serif">falcon</span>
               </div>
             </a>
@@ -258,34 +258,34 @@
               </li>
             </ul>
           </nav>
-          <div class="card mb-3" id="customersTable" data-list='{"valueNames":["name","email","phone","address","joined"],"page":10,"pagination":true}'>
-            <div class="card-header">
-              <div class="row flex-between-center">
+    <div class="card mb-3" id="customersTable" data-list='{"valueNames":["name","email","phone","address","joined"],"page":10,"pagination":true}'>
+        <div class="card-header">
+            <div class="row flex-between-center">
                 <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
-                  <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Customers</h5>
+                    <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Customers</h5>
                 </div>
-                  {% if messages %}
-                      <ul class="messages">
-                          {% for message in messages %}
-                              <li style="color: crimson" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                          {% endfor %}
-                      </ul>
-                  {% endif %}
                 <div class="col-8 col-sm-auto text-end ps-2">
-                  <div class="d-none" id="table-customers-actions">
-                    <div class="d-flex">
-                      <select class="form-select form-select-sm" aria-label="Bulk actions">
-                        <option selected="">Bulk actions</option>
-                        <option value="Refund">Refund</option>
-                        <option value="Delete">Delete</option>
-                        <option value="Archive">Archive</option>
-                      </select>
-                      <button class="btn btn-falcon-default btn-sm ms-2" type="button">Apply</button>
+                    <div class="d-none" id="table-customers-actions">
+                        <div class="d-flex">
+                            <select class="form-select form-select-sm" aria-label="Bulk actions">
+                                <option selected="">Bulk actions</option>
+                                <option value="Refund">Refund</option>
+                                <option value="Delete">Delete</option>
+                                <option value="Archive">Archive</option>
+                            </select>
+                            <button class="btn btn-falcon-default btn-sm ms-2" type="button">SEND</button>
+                        </div>
                     </div>
-                  </div>
-                  <div id="table-customers-replace-element">
-                      <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1"><a href="{% url 'add_customer' %}">NEW</a>></span></button>
-                      <div>
+                    <div id="table-customers-replace-element">
+                        <a href="http://127.0.0.1:8000/add_customer" class="btn btn-falcon-default btn-sm"
+                           type="button">
+                            <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+                            <span class="d-none d-sm-inline-block ms-1">New</span></a>
+                        <a href="http://127.0.0.1:8000/filter_page" class="btn btn-falcon-default btn-sm"
+                           type="button">
+                            <span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span>
+                            <span class="d-none d-sm-inline-block ms-1">Filter</span></a>
+
                           <!-- Export form -->
                           <form action="{% url 'export_data' %}" method="get">
                               <label for="format" style="margin-right: 5px;">Export as:</label>
