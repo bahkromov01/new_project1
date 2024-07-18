@@ -1,7 +1,9 @@
 from django.urls import path
 
-from customer.views.auth import LoginPageView, logout_user, register, SendEmailView
-from customer.views.views import CustomersView, AddCustomerView, DeleteCustomerView, EditcustomerView, export_data
+from customer.views.auth import LoginPageView, logout_user, register, send_email, verify_email_done, \
+    verify_email_complete, verify_email
+from customer.views.views import CustomersView, AddCustomerView, DeleteCustomerView, EditcustomerView, export_data, \
+    verify_email_confirm
 
 urlpatterns = [
     path('customer_list/', CustomersView.as_view(), name='customers'),
@@ -13,6 +15,13 @@ urlpatterns = [
     path('logout_user/', logout_user, name='logout'),
     path('register/', register, name='register'),
     path('export_data/', export_data, name='export_data'),
-    path('email_send/', SendEmailView.as_view(), name='email_send')
+    path('send_email/', send_email, name='send_email'),
+
+    # sending massage
+
+    path('verify-email/', verify_email, name='verify_email'),
+    path('verify-email/done/', verify_email_done, name='verify-email-done'),
+    path('verify-email-confirm/<uidb64>/<token>/', verify_email_confirm, name='verify-email-confirm'),
+    path('verify-email/complete/', verify_email_complete, name='verify-email-complete'),
 
 ]

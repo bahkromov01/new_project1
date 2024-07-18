@@ -2,9 +2,10 @@ import datetime
 
 from django import forms
 from django.contrib.auth.models import User
+
+from customer.custom_field import MultiEmailField
 from customer.models import Customer
 from django.contrib.auth import get_user_model
-
 
 class CustomerModelForm(forms.ModelForm):
     class Meta:
@@ -83,7 +84,5 @@ class RegisterModelForm(forms.ModelForm):
 class EmailForm(forms.Form):
     subject = forms.CharField(max_length=100)
     message = forms.CharField(widget=forms.Textarea)
-    email_from = forms.EmailField()
-    email_to = forms.EmailField()
-
+    recipients = MultiEmailField()
 

@@ -10,10 +10,14 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.template import response
 from django.template.context_processors import request
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from django.views import View
 
-from customer.models import Customer
+from customer.models import Customer, User
 from customer.forms import CustomerModelForm
+from customer.tokens import account_activation_token
+
 
 # Create your views here.
 
@@ -160,4 +164,20 @@ def export_data(request):
         response.content = 'Bad request'
 
     return response
+
+
+def verify_email_confirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.email_is_verified = True
+        user.save()
+        messages.success(request, 'Your email has been verified.')
+        return redirect('verify_email_complete')
+    else:
+        messages.warning(request, 'The link is invalid.')
+    return render(request, 'email/verify_email_confirm.html')
 

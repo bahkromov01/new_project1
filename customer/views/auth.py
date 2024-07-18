@@ -1,10 +1,20 @@
+from email.message import EmailMessage
+from typing import Any
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.core.mail import send_mail
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.views import View
 
+from confic import settings
 from customer.forms import LoginForm, RegisterModelForm, EmailForm
+from confic import settings
+from customer.tokens import account_activation_token
 
 
 # def login_page(request):
@@ -69,35 +79,64 @@ def register(request):
         if form.is_valid():
             user = form.save(commit=False)
             password = form.cleaned_data['password']
+            user.is_active = False
             user.set_password(password)
-            user.save()
+            if not user.is_active:
+                current_site = get_current_site(request)
+                user = request.user
+                subject = "Verify Email"
+                message = render_to_string('email/verify_email_message.html', {
+                    'request': request,
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': account_activation_token.make_token(user),
+                })
+                useremail = user.email
+
+                email = EmailMessage(
+                    subject, message, to=[useremail]
+                )
+                email.content_subtype = 'html'
+                email.send()
+                user.save()
+                return redirect('verify-email-done')
+            useremail = user.email
+            # sent message
+            send_mail('AnonymUser', 'You successfully registered !', settings.DEFAULT_FROM_EMAIL, [useremail],
+                      fail_silently=False)
             login(request, user)
             return redirect('customers')
     else:
         form = RegisterModelForm
 
-    return render(request, 'auth/register.html', {form:form})
+    return render(request, 'auth/register.html', {'form': form})
 
 
-class SendEmailView(View):
-    def get(self, request):
-        form = EmailForm()
-        context = {'form': form}
-        return render(request, 'app/email_send.html', context)
-
-    def post(self, request):
+def send_email(request):
+    sent = False
+    if request.method == 'POST':
         form = EmailForm(request.POST)
         if form.is_valid():
             subject = form.cleaned_data['subject']
-            email_from = form.cleaned_data['email_from']
-            email_to = [form.cleaned_data['email_to']]
             message = form.cleaned_data['message']
-            try:
-                send_mail(subject, message, email_from, email_to)
-                messages.success(request, 'Message sent successfully.')
-                return redirect('customers')
-            except Exception as e:
-                messages.error(request, f'Error sending message: {e}')
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipients = form.cleaned_data['recipients']
+            send_mail(subject, message, from_email, recipients, fail_silently=False)
+            sent = True
+    else:
+        form = EmailForm()
 
-        context = {'form': form}
-        return render(request, 'app/email_send.html', context)
+    return render(request, 'email/email_send.html', {'form': form, 'sent': sent})
+
+
+def verify_email_done(request):
+    return render(request, 'email/verify_email_done.html')
+
+
+def verify_email_complete(request):
+    return render(request, 'email/verify_email_complete.html')
+
+
+def verify_email(request):
+    return render(request, 'email/verify_email.html')
