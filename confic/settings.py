@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'customer.apps.CustomerConfig',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +146,25 @@ EMAIL_HOST_USER = 'baxromovruslan322@gmail.com'
 EMAIL_HOST_PASSWORD = 'zcpj xuml rixh uebv'
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+AUTHENTICATION_BACKENDS = [
+   'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.github.GithubOAuth2',
+]
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '703741537059-o73egdnmkbu02mnb0ik7o6qbcf0im0ag.apps.googleusercontent.com' # Google Client ID
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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' # Google Client Secret
+
+
+SOCIAL_AUTH_FACEBOOK_KEY = '703741537059-uoa8hgdt90mfbc2th8q9nrrhkvqfoul5.apps.googleusercontent.com' # Facebook App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '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' # Facebook App Secret
+
+SOCIAL_AUTH_TWITTER_KEY = '703741537059-gbjuulnhkqoo9tpfsh2ptvr24rs8cja3.apps.googleusercontent.com' # Twitter API Key
+SOCIAL_AUTH_TWITTER_SECRET = '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' # Twitter API Secret
+
+
+LOGIN_REDIRECT_URL = '/customer/customer_list'

@@ -17,38 +17,38 @@ from confic import settings
 from customer.tokens import account_activation_token
 
 
-# def login_page(request):
-#     if request.method == 'POST':
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             password = form.cleaned_data['password']
-#             user = authenticate(request, email=email, password=password)
-#             if user:
-#                 login(request, user)
-#                 return redirect('customers')
-#     else:
-#         form = LoginForm()
-#     return render(request, 'auth/login.html', {'form': form})
-
-
-class LoginPageView(View):
-    def get(self, request):
-        form = LoginForm()
-        context = {'form': form}
-
-    def post(self, request):
+def login_page(request):
+    if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)
-            if user is not None:
+            user = authenticate(request, email=email, password=password)
+            if user:
                 login(request, user)
-                return redirect('home')
-        else:
-            form = LoginForm()
-            return render(request, 'auth/login.html', {'form':form})
+                return redirect('customers')
+    else:
+        form = LoginForm()
+    return render(request, 'auth/login.html', {'form': form})
+
+
+# class LoginPageView(View):
+#     def get(self, request):
+#         form = LoginForm()
+#         context = {'form': form}
+#
+#     def post(self, request):
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             username = form.cleaned_data['username']
+#             password = form.cleaned_data['password']
+#             user = authenticate(username=username, password=password)
+#             if user is not None:
+#                 login(request, user)
+#                 return redirect('home')
+#         else:
+#             form = LoginForm()
+#             return render(request, 'auth/login.html', {'form':form})
 
 
 # def login_phone(request):
@@ -83,7 +83,6 @@ def register(request):
             user.set_password(password)
             if not user.is_active:
                 current_site = get_current_site(request)
-                user = request.user
                 subject = "Verify Email"
                 message = render_to_string('email/verify_email_message.html', {
                     'request': request,
@@ -92,18 +91,16 @@ def register(request):
                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                     'token': account_activation_token.make_token(user),
                 })
-                useremail = user.email
 
                 email = EmailMessage(
-                    subject, message, to=[useremail]
+                    subject, message, to=[user.email]
                 )
                 email.content_subtype = 'html'
                 email.send()
                 user.save()
                 return redirect('verify-email-done')
-            useremail = user.email
             # sent message
-            send_mail('AnonymUser', 'You successfully registered !', settings.DEFAULT_FROM_EMAIL, [useremail],
+            send_mail('AnonymUser', 'You successfully registered !', settings.DEFAULT_FROM_EMAIL, [user.email],
                       fail_silently=False)
             login(request, user)
             return redirect('customers')
@@ -111,6 +108,49 @@ def register(request):
         form = RegisterModelForm
 
     return render(request, 'auth/register.html', {'form': form})
+
+# class RegisterDoneView(View):
+#     def get(self, request):
+#         form = RegisterModelForm()
+#         return render(request, 'auth/register.html', {"form": form})
+#
+#     def post(self, request):
+#         form = RegisterModelForm(request.POST)
+#         if form.is_valid():
+#             user = form.save(commit=False)
+#             password = form.cleaned_data['password']
+#             user.is_active = False
+#             user.set_password(password)
+#             if not user.is_active:
+#                 current_site = get_current_site(request)
+#                 subject = "Verify Email"
+#                 message = render_to_string('email/verify_email_message.html', {
+#                     'request': request,
+#                     'user': user,
+#                     'domain': current_site.domain,
+#                     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+#                     'token': account_activation_token.make_token(user),
+#                 })
+#
+#                 email = EmailMessage(
+#                     subject, message, to=[user.email]
+#                 )
+#                 email.content_subtype = 'html'
+#                 email.send()
+#                 user.save()
+#                 login(request, user)
+#                 return redirect('verify-email-done')
+#             # sent message
+#             send_mail('AnonymUser', 'You successfully registered !', settings.DEFAULT_FROM_EMAIL, [user.email],
+#                       fail_silently=False)
+#             login(request, user)
+#             return redirect('customers')
+#         else:
+#             form = RegisterModelForm
+#
+#         return render(request, 'auth/register.html', {'form': form})
+
+
 
 
 def send_email(request):

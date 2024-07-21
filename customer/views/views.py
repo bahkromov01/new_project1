@@ -73,18 +73,20 @@ class CustomersView(View):
 #     }
 #     return render(request, 'customer/add_customer.html', context)
 
-class AddCustomerView(View):
-    def get(self, request):
-        form = CustomerModelForm()
-        if request.method == 'POST':
-            form = CustomerModelForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('customers')
-        context = {
-            'form': form
-        }
-        return render(request, 'customer/add_customer.html', context)
+def add_customer(request):
+    form = CustomerModelForm()
+    if request.method == 'POST':
+        form = CustomerModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('customers')
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'customer/add_customer.html', context)
+
 
 
 # def delete_customer(request, pk):
